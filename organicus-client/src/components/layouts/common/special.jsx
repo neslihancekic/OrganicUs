@@ -3,6 +3,8 @@ import Slider from 'react-slick';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 
+import StarRatingComponent from 'react-star-rating-component'
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -68,11 +70,12 @@ class Special extends Component {
                                                                 src={`${API}/getProduct/Picture/${product[2]._id}`} alt="" />
                                                         </Link>
                                                         <div className="media-body align-self-center">
-                                                            <div className="rating"><i className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i></div>
+                                                        <StarRatingComponent 
+                                                            name="rate1" 
+                                                            starCount={5}
+                                                            value={product[2].Star}
+                                                            editing={false}
+                                                        />
                                                             <Link to={`${process.env.PUBLIC_URL}/product/${product[2]._id}`} >
                                                                 <h6>{product[2].Title}</h6>
                                                             </Link>
@@ -95,11 +98,12 @@ class Special extends Component {
                                                                 src={`${API}/getProduct/Picture/${product[1]._id}`} alt="" />
                                                         </Link>
                                                         <div className="media-body align-self-center">
-                                                            <div className="rating"><i className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i></div>
+                                                        <StarRatingComponent 
+                                                            name="rate1" 
+                                                            starCount={5}
+                                                            value={product[1].Star}
+                                                            editing={false}
+                                                        />
                                                             <Link to={`${process.env.PUBLIC_URL}/product/${product[1]._id}`} >
                                                                 <h6>{product[1].Title}</h6>
                                                             </Link>
@@ -145,11 +149,12 @@ class Special extends Component {
                                                                 src={`${API}/getProduct/Picture/${product[3]._id}`} alt="" />
                                                         </Link>
                                                         <div className="media-body align-self-center">
-                                                            <div className="rating"><i className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i></div>
+                                                        <StarRatingComponent 
+                                                            name="rate1" 
+                                                            starCount={5}
+                                                            value={product[3].Star}
+                                                            editing={false}
+                                                        />
                                                             <Link to={`${process.env.PUBLIC_URL}/product/${product[3]._id}`} >
                                                                 <h6>{product[3].Title}</h6>
                                                             </Link>
@@ -172,11 +177,12 @@ class Special extends Component {
                                                                 src={`${API}/getProduct/Picture/${product[4]._id}`} alt="" />
                                                         </Link>
                                                         <div className="media-body align-self-center">
-                                                            <div className="rating"><i className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i> <i
-                                                                className="fa fa-star"></i></div>
+                                                        <StarRatingComponent 
+                                                            name="rate1" 
+                                                            starCount={5}
+                                                            value={product[4].Star}
+                                                            editing={false}
+                                                        />
                                                             <Link to={`${process.env.PUBLIC_URL}/product/${product[4]._id}`} >
                                                                 <h6>{product[4].Title}</h6>
                                                             </Link>

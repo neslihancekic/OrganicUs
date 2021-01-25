@@ -17,7 +17,6 @@ test('Should get product', async () => {
 
     expect(response.body).toMatchObject({
         Title: product.Title,
-        ProducerID: producerOne._id.toString(),
         CategoryID: categoryOne._id.toString()
     })
 })

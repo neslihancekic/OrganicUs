@@ -35,6 +35,7 @@ exports.remove = (req,res) => {
 
 exports.list = (req,res) => {
     Comment.find({ProductId : req.product})
+    .populate('UserId')
     .exec((err,comments) => {
         if(err){
             return res.status(400).json({

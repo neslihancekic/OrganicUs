@@ -21,14 +21,11 @@ test('Customer should able to comment to product', async () => {
     expect (comment.Comment).toBe("This is my comment")
 })
 
-test('Customer should be able to see all comment on that product', async () => {
+test('Everyone should be able to see all comment on that product', async () => {
     const response = await request(app)
         .get(`/api/getComment/${productOne._id}`)
         .expect(200)
 
-    const comments = await Comment.find({
-        ProductId: productOne._id
-    })
 
     expect(response.body.length).toBe(1)
 })

@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react'
-import data from '../../assets/admin/data/orders';
 import Datatable from '../admin/common/datatable'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {GetOrders} from '../../api/cart'
+import {getProduct} from '../../api/product'
 
-import Image from '../../components/admin/common/image';
 import {isAuthenticated} from '../../api/auth'
 const API = process.env.NODE_ENV
 export class CustomerOrders extends Component {
@@ -15,24 +14,33 @@ export class CustomerOrders extends Component {
             myData: []
         }
     }
+
+    
     async componentDidMount(){
         const{user,token} = isAuthenticated()
         await GetOrders(user._id,token)
-        .then(data => {
+        .then(async data => {
             if(data.err){ 
                 toast.error('Error occured!')
             }else{
-                console.log(data)
                 var order =[]
+                
                 for(const or of data){
                     var item ={}
                     item['OrderId'] = or.orderId
                     var pictures=[]
                     var quantitys=[]
                     var status=[]
+                    var producerIds=[]
+                    var producerNames=[]
+                    var productTitles=[]
                     for(const pro of or.orderItems){
-                        pictures.push(`<img src="${API}/getProduct/Picture/${pro.ProductId}" href="${process.env.PUBLIC_URL}/product/${pro.ProductId}" height="50px"/>`)
+                        var product= await getProduct(pro.ProductId)
+                        pictures.push(`<a href="${process.env.PUBLIC_URL}/product/${pro.ProductId}" ><img src="${API}/getProduct/Picture/${pro.ProductId}" height="50px"/></a>`)
                         quantitys.push(pro.Quantity)
+                        producerIds.push(product.ProducerID)
+                        producerNames.push(product.ProducerID.firstName)
+                        productTitles.push(product.Title)
                         if(pro.Prepearing==true && pro.Shipped==false ){
                             status.push(`<span className="badge badge-secondary">Prepearing</span>`)
                         }else if( pro.Shipped==true ){
@@ -41,12 +49,16 @@ export class CustomerOrders extends Component {
                             status.push(`<span className="badge badge-info">Waiting</span>`)
                         }
                     }
+                    item['Producers'] = producerIds
+                    item['ProducerNames'] = producerNames
+                    item['ProductTitles'] = productTitles
                     item['Picture'] = pictures
                     item['Quantity'] = quantitys
                     item['Status'] = status
                     item['TotalPrice'] = or.TotalPrice
                     order.push(item)
                 }
+            
                 
                 this.setState({
                     myData: order

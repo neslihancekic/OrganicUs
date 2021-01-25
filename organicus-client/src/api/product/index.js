@@ -81,3 +81,90 @@ export const relatedProduct = async (categoryId) => {
     }
 }
 
+export const rateProduct = async (userId,token,req) => {
+    try{
+        const response = await fetch(`${API}/rateProduct/${userId}`,{
+            method: "PATCH",
+            headers:{
+                Accept: 'application/json',
+                "Content-Type" : 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(req)
+        })
+        const json = await response.json()
+        return json
+    }
+    catch {
+    }
+}
+
+export const rateProducer = async (userId,token,req) => {
+    try{
+        const response = await fetch(`${API}/rateProducer/${userId}`,{
+            method: "PATCH",
+            headers:{
+                Accept: 'application/json',
+                "Content-Type" : 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(req)
+        })
+        const json = await response.json()
+        return json
+    }
+    catch {
+    }
+}
+
+export const listComment = async (productId) => {
+    try{
+        const response = await fetch(`${API}/getComment/${productId}`,{
+            method: "GET",
+            headers:{
+                Accept: 'application/json',
+                "Content-Type" : 'application/json'
+            }
+        })
+        const json = await response.json()
+        return json
+    }
+    catch {
+    }
+}
+
+export const pushComment = async (userId,token,req,productId) => {
+    try{
+        const response = await fetch(`${API}/createComment/${productId}/${userId}`,{
+            method: "POST",
+            headers:{
+                Accept: 'application/json',
+                "Content-Type" : 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(req)
+        })
+        const json = await response.json()
+        return json
+    }
+    catch {
+    }
+}
+
+export const pushComplaint = async (userId,token,req) => {
+    try{
+        const response = await fetch(`${API}/createComplaint/${userId}`,{
+            method: "POST",
+            headers:{
+                Accept: 'application/json',
+                "Content-Type" : 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(req)
+        })
+        const json = await response.json()
+        return json
+    }
+    catch {
+    }
+}

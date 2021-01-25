@@ -61,30 +61,13 @@ class FooterOne extends Component {
                             <div className="col offset-xl-1">
                                 <div className="sub-title">
                                     <div className="footer-title">
-                                        <h4>my account</h4>
+                                        <h4>Pages</h4>
                                     </div>
                                     <div className="footer-contant">
                                         <ul>
-                                            <li><Link to={`${process.env.PUBLIC_URL}/left-sidebar/collection`} >womens</Link></li>
-                                            <li><Link to={`${process.env.PUBLIC_URL}/left-sidebar/collection`} >clothing</Link></li>
-                                            <li><Link to={`${process.env.PUBLIC_URL}/left-sidebar/collection`} >accessories</Link></li>
-                                            <li><Link to={`${process.env.PUBLIC_URL}/left-sidebar/collection`} >featured</Link></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="sub-title">
-                                    <div className="footer-title">
-                                        <h4>why we choose</h4>
-                                    </div>
-                                    <div className="footer-contant">
-                                        <ul>
-                                            <li><a href="#">shipping & return</a></li>
-                                            <li><a href="#">secure shopping</a></li>
-                                            <li><a href="#">gallary</a></li>
-                                            <li><a href="#">affiliates</a></li>
-                                            <li><a href="#">contacts</a></li>
+                                            <li><Link to={`${process.env.PUBLIC_URL}/products`} >all products</Link></li>
+                                            <li><Link to={`${process.env.PUBLIC_URL}/complaint`} >give a complaint</Link></li>
+                                            <li><Link to={`${process.env.PUBLIC_URL}/contact`} >Contact</Link></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -96,13 +79,11 @@ class FooterOne extends Component {
                                     </div>
                                     <div className="footer-contant">
                                         <ul className="contact-list">
-                                            <li><i className="fa fa-map-marker"></i>OrganicUs Demo Store, Demo store
-                                                India 345-659
+                                            <li><i className="fa fa-map-marker"></i>OrganicUs 
                                             </li>
                                             <li><i className="fa fa-phone"></i>Call Us: 123-456-7898</li>
                                             <li><i className="fa fa-envelope-o"></i>Email Us: <a
-                                                href="#">Support@Fiot.com</a></li>
-                                            <li><i className="fa fa-fax"></i>Fax: 123456</li>
+                                                href="#">organicus.team@gmail.com</a></li>
                                         </ul>
                                     </div>
                                 </div>

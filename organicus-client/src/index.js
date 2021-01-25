@@ -12,7 +12,6 @@ import ProducerRoute from "./api/auth/ProducerRoute"
 import store from './store';
 import translations from './constants/translations'
 import { getAllProducts } from './actions'
-import Landing from './components/landing'
 
 
 // Layouts
@@ -21,6 +20,7 @@ import Vegetables from './components/layouts/vegetables/main';
 
 //Collection Pages
 import CollectionLeftSidebar from "./components/collection/collection-left-sidebar";
+import CollectionProducer from "./components/collection/collection-producer";
 // Product Pages
 import NoSideBar from "./components/products/no-sidebar";
 
@@ -34,15 +34,12 @@ import orderSuccess from './components/checkout/success-page'
 // Extra Pages
 import aboutUs from './components/pages/about-us'
 import PageNotFound from './components/pages/404'
-import lookbook from './components/pages/lookbook'
 import Login from './components/pages/login'
 import Register from './components/pages/register'
 import Search from './components/pages/search'
-import Collection from './components/pages/collection'
 import ForgetPassword from './components/pages/forget-password'
 import Contact from './components/pages/contact'
 import Dashboard from './components/pages/dashboard'
-import Faq from './components/pages/faq'
 import CustomerOrders from './components/pages/orders'
 
 // Blog Pages
@@ -87,6 +84,7 @@ class Root extends React.Component {
                                 
 								{/*Routes For Features (Product Collection) */}
 								<Route path={`${process.env.PUBLIC_URL}/products`} component={CollectionLeftSidebar}/>
+								<Route path={`${process.env.PUBLIC_URL}/ProducerProducts/:id`} component={CollectionProducer}/>
 
 								{/*Routes For Single Product*/}
 								<Route path={`${process.env.PUBLIC_URL}/product/:id`} component={NoSideBar}/>
@@ -101,15 +99,12 @@ class Root extends React.Component {
 								{/*Routes For Extra Pages*/}
                                 <Route path={`${process.env.PUBLIC_URL}/pages/about-us`} component={aboutUs}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/404`} component={PageNotFound}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/lookbook`} component={lookbook}/>
                                 <Route path={`${process.env.PUBLIC_URL}/login`} component={Login}/>
                                 <Route path={`${process.env.PUBLIC_URL}/register`} component={Register}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/search`} component={Search}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/collection`} component={Collection}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/forget-password`} component={ForgetPassword}/>
                                 <Route path={`${process.env.PUBLIC_URL}/contact`} component={Contact}/>
                                 <PrivateRoute path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/faq`} component={Faq}/>
 
                                 <Route path={`${process.env.PUBLIC_URL}/orders`} component={CustomerOrders} />
 

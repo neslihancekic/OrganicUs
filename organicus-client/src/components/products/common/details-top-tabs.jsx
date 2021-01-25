@@ -2,8 +2,45 @@ import React, {Component} from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.scss';
 import {Link} from 'react-router-dom'
+import { toast } from 'react-toastify';
+import { listComment,pushComment } from '../../../api/product';
+import { isAuthenticated } from '../../../api/auth';
 
 class DetailsTopTabs extends Component {
+    constructor() {
+        super();
+        this.state = {
+            comments:[],
+            Comment:""
+        };
+    }
+
+    async componentDidMount(){
+        console.log(this.props.item)
+        const response = await listComment(this.props.item._id);
+        if(response == undefined){ 
+            toast.error('Error occured!')
+        }else{
+            console.log(response)
+            this.setState({comments:response})
+        }
+
+    }
+
+    handleChange(e) 
+    {
+        this.setState({ [e.target.name] : e.target.value });
+    }
+    async clickSubmit() {
+        const{user,token}=isAuthenticated();
+        const response = await pushComment(user._id,token,{"UserId":user._id,"ProductId":this.props.item._id,"Comment":this.state.Comment},this.props.item._id);
+        if(response == undefined){ 
+            toast.error('Error occured!')
+        }else{
+            console.log(response)
+        }
+    }
+
     render (){
 
         return (
@@ -24,46 +61,44 @@ class DetailsTopTabs extends Component {
                             </TabList>
                             
                             <TabPanel>
-                                <p className="mt-4 p-0">
-                                    Lorem Ipsum is simply dummy text of the printing and
-                                    typesetting industry. Lorem Ipsum has been the industry's
-                                    standard dummy text ever since the 1500s, when an unknown
-                                    printer took a galley of type and scrambled it to make a
-                                    type specimen book. It has survived not only five centuries,
-                                    but also the leap into electronic typesetting, remaining
-                                    essentially unchanged. It was popularised in the 1960s with
-                                    the release of Letraset sheets containing Lorem Ipsum
-                                    passages, and more recently with desktop publishing software
-                                    like Aldus PageMaker including versions of Lorem Ipsum.
-                                </p>
+                            <section className="blog-detail-page section-b-space">
+                                <div className="container">
+                                    <div className="row section-b-space">
+                                        <div className="col-sm-12">
+                                            <ul className="comment-section">
+                                                {this.state.comments.map((comment, index) =>
+                                                    <li key={index}>
+                                                        <div className="media">
+                                                            <img src={`${process.env.PUBLIC_URL}/assets/images/avtar.jpg`} alt="Generic placeholder image" />
+                                                                <div className="media-body">
+                                                                    <h6>{comment.UserId.firstName} {comment.UserId.lastName} <span>( {comment.createdAt})</span></h6>
+                                                                    <p>{comment.Comment}</p>
+                                                                </div>
+                                                        </div>
+                                                    </li>
+                                                )}
+                                                {this.state.comments.length===0 && 
+                                                <div className="media-body">
+                                                                    <h6>There are no comments yet!</h6>
+                                                                    
+                                                                </div>}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                             </TabPanel>
                             <TabPanel>
                                 <form className="theme-form mt-4">
                                     <div className="form-row">
                                         <div className="col-md-12 ">
-                                            <div className="media m-0">
-                                                <label>Rating</label>
-                                                <div className="media-body ml-3">
-                                                    <div className="rating three-star">
-                                                        <i className="fa fa-star"></i>
-                                                        <i className="fa fa-star"></i>
-                                                        <i className="fa fa-star"></i>
-                                                        <i className="fa fa-star"></i>
-                                                        <i className="fa fa-star"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div className="col-md-12">
-                                            <label htmlFor="review">Review Title</label>
-                                            <input type="text" className="form-control" id="review" placeholder="Enter your Review Subjects" required />
+                                            <label htmlFor="review">Comment</label>
+                                            <textarea className="form-control" placeholder="Write Your Comment Here" id="exampleFormControlTextarea1" rows="6" name="Comment" onChange={this.handleChange.bind(this)} ></textarea>
                                         </div>
                                         <div className="col-md-12">
-                                            <label htmlFor="review">Review Title</label>
-                                            <textarea className="form-control" placeholder="Wrire Your Testimonial Here" id="exampleFormControlTextarea1" rows="6"></textarea>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <button className="btn btn-solid" type="submit">Submit Your Review</button>
+                                            <button className="btn btn-solid" type="submit" onClick={this.clickSubmit.bind(this)}>Submit Your Comment</button>
                                         </div>
                                     </div>
                                 </form>

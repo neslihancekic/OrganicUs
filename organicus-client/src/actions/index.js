@@ -1,6 +1,5 @@
-import shop from '../api/shop'
+
 import * as types from '../constants/ActionTypes'
-import store from "../store";
 import { toast  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -17,10 +16,7 @@ export const receiveProducts = products => ({
 
 export const getAllProducts = () => dispatch => {
     dispatch(fetchProductsBegin());
-    shop.getProducts(products => {
-        dispatch(receiveProducts(products));
-        return products;
-    })
+    
 }
 export const fetchSingleProduct = productId => ({
     type: types.FETCH_SINGLE_PRODUCT,

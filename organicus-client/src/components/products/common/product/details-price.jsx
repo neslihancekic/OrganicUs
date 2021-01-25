@@ -25,6 +25,10 @@ class DetailsWithPrice extends Component {
     };
 
     componentDidMount() {
+        if(this.props.item.Stock==0){
+            
+            this.setState({stock: 'Out of Stock !'})
+        }
         this.setState({
             nav3: this.slider3
         });
@@ -80,6 +84,8 @@ class DetailsWithPrice extends Component {
                     <div className="product-description border-product">
                         
                         <span className="instock-cls">{this.state.stock}</span>
+                        {item.Stock>0 && (
+                        <div>
                         <h6 className="product-title">quantity</h6>
                         <div className="qty-box">
                             <div className="input-group">
@@ -96,11 +102,26 @@ class DetailsWithPrice extends Component {
                                </span>
                             </div>
                         </div>
+                        </div>
+                        )}
                     </div>
                     <div className="product-buttons" >
                         {item.Stock>0 ? ( <div><a className="btn btn-solid" onClick={() => addToCartClicked(item, this.state.quantity)}>add to cart</a>
                         <Link to={`${process.env.PUBLIC_URL}/checkout`} className="btn btn-solid" onClick={() => BuynowClicked(item, this.state.quantity)} >buy now</Link></div>):(<a className="btn btn-solid" >notify me when back in stock</a>)}
                         
+                    </div>
+                    <div className="product-icon">
+                        <ul className="product-social">
+                                <li><i className="fa fa-star"></i><span>  {item.ProducerID.Star}</span></li>
+                        </ul>
+                        <Link to={`${process.env.PUBLIC_URL}/producerProducts/${item.ProducerID._id}`} target="_blank"><button className="wishlist-btn"><i
+                            className="fa fa-user"></i><span
+                            className="title-font">{item.ProducerID.firstName} {item.ProducerID.lastName}</span>
+                        </button></Link>
+                        <Link to={`${process.env.PUBLIC_URL}/producerProducts/${item.ProducerID._id}`}><button className="wishlist-btn"><i
+                            className="fa fa-comment-o"></i><span
+                            className="title-font">Send Message About Product</span>
+                        </button></Link>
                     </div>
                     <div className="border-product">
                         <h6 className="product-title">product details</h6>

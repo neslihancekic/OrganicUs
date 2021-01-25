@@ -61,7 +61,7 @@ class ProductItem extends Component {
 
                         </div>
                         <div className="front">
-                            <Link to={`${process.env.PUBLIC_URL}/product/${product._id}`}>
+                            <Link onClick={this.forceUpdate} to={`${process.env.PUBLIC_URL}/product/${product._id}`}>
                                 <img
                                 src={`${API}/getProduct/Picture/${product._id}`}
                                 className="img-fluid"

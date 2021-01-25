@@ -39,7 +39,7 @@ class App extends Component {
                             <HeaderTwo logoName={'logo.png'}/>
                             {this.props.children}
                             <FooterOne logoName={'logo.png'}/>
-
+ 
                         </Fragment>
                     )}
                     {(isAuthenticated() && isAuthenticated().user.role === 'Producer' ) && (

@@ -4,9 +4,11 @@ import 'react-table/react-table.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import StarRatingComponent from 'react-star-rating-component'
 import Modal from 'react-responsive-modal';
 
 import {isAuthenticated} from '../../../api/auth'
+import {rateProducer,pushComplaint} from '../../../api/product'
 import {updateOrder} from '../../../api/admin'
 const{user,token} = isAuthenticated()
 export class Datatable extends Component {
@@ -16,8 +18,12 @@ export class Datatable extends Component {
             checkedValues: [],
             myData: this.props.myData,
             open: false,
-            activeitem: '',
-            shippinginfo: ''
+            openStar: false,
+            openComplaint: false,
+            activeitem: this.props.myData[0],
+            complaint: '',
+            selectedId: '',
+            title: ''
         }
     }
 
@@ -74,6 +80,18 @@ export class Datatable extends Component {
 
     onCloseModal = () => {
         this.setState({ open: false });
+        this.setState({ openStar: false });
+        this.setState({ openComplaint: false });
+    };
+
+    onOpenModalStar = (item) => {
+        console.log(item)
+        this.setState({ openStar: true, activeitem: item });
+    };
+
+    onOpenModalComplaint = (item) => {
+        console.log(item)
+        this.setState({ openComplaint: true, activeitem: item });
     };
 
     onCloseModalPrepearing = async () => {
@@ -102,13 +120,51 @@ export class Datatable extends Component {
         })
     };
 
-    handleChange = (info) => {
-        this.setState({ shippinginfo: info });
+    onClickComplaint = async () => {
+        this.setState({ openComplaint: false });
+    };
+
+    handleChange(e) 
+    {
+        this.setState({ [e.target.name] : e.target.value });
     }
 
-    editOrderStatus = () => {
-
+    handleChangeSelected = (id) => {
+        this.setState({ selectedId: id });
     }
+
+    async onStarClick(nextValue, prevValue, name) {
+        console.log(name,this.state.activeitem)
+        const {user,token} = isAuthenticated();
+        if(user==undefined){
+            toast.error("You have to login!")
+            return
+        }   
+        const response = await rateProducer(user._id,token,{"ProducerId":this.state.activeitem.Producers[name]._id,"Star":nextValue});
+        if(response == undefined){ 
+            toast.error('Error occured!')
+        }else{
+            console.log(response)
+        }     
+        
+    }
+
+    async onSendComplaint() {
+        console.log(this.state.title,this.state.complaint,this.state.selectedId)
+        const {user,token} = isAuthenticated();
+        if(user==undefined){
+            toast.error("You have to login!")
+            return
+        }   
+        const response = await pushComplaint(user._id,token,{"Title":this.state.title,"Complaint":this.state.complaint,"ProducerId":this.state.selectedId,"UserId":user._id});
+        if(response == undefined){ 
+            toast.error('Error occured!')
+        }else{
+            console.log(response)
+        }     
+        
+    }
+    
 
     render() {
         const { pageSize, myClass, multiSelectOption, pagination } = this.props;
@@ -132,7 +188,9 @@ export class Datatable extends Component {
             if(key === "order_status"){
                 editable = null;
             }
-
+            if(key === "Producers"){
+                continue
+            }
             columns.push(
                 {
                     Header: <b>{this.Capitalize(key.toString())}</b>,
@@ -178,24 +236,13 @@ export class Datatable extends Component {
             {
                 columns.push(
                     {
-                        Header: <b>Action</b>,
+                        Header: <b>Edit Status</b>,
                         id: 'delete',
                         accessor: str => "delete",
                         Cell: (row) => (
                             
                             <div>
-                                <span onClick={() => {
-                                    if (window.confirm('Are you sure you wish to delete this item?')) {
-                                        let data = myData;
-                                        data.splice(row.index, 1);
-                                        this.setState({ myData: data });
-                                    }
-                                    toast.success("Successfully Deleted !")
-    
-                                }}>
-                                    {/*<i className="fa fa-trash" style={{ width: 35, fontSize: 20, padding: 11, color: '#e4566e' }}
-                                    ></i>*/}
-                                </span>
+                               
                             <span onClick={()=>this.onOpenModal(myData[row.index])} data-toggle="modal" data-original-title="test" data-target="#exampleModal">
                                 <i  className="fa fa-pencil" style={{ width: 35, fontSize: 20, padding: 11,color:'rgb(40, 167, 69)' }}></i></span>
                             </div>
@@ -206,6 +253,42 @@ export class Datatable extends Component {
                     sortable: false
                 }
             )
+            }else{
+                columns.push(
+                    {
+                        Header: <b>Rate Producers</b>,
+                        id: 'delete',
+                        accessor: str => "delete",
+                        Cell: (row) => (
+                            
+                            <div>
+                                
+                            <span onClick={()=>this.onOpenModalStar(myData[row.index])} data-toggle="modal" data-original-title="test" data-target="#exampleModal">
+                                <i  className="fa fa-star" style={{ width: 35, fontSize: 20, padding: 11,color:'rgb(100, 200, 15)' }}></i></span>
+                            </div>
+                    ),
+                    style: {
+                        textAlign: 'center'
+                    },
+                    sortable: false
+                })
+                columns.push(
+                    {
+                        Header: <b>Complaint Producers</b>,
+                        id: 'delete',
+                        accessor: str => "delete",
+                        Cell: (row) => (
+                            
+                            <div>
+                            <span onClick={()=>this.onOpenModalComplaint(myData[row.index])} data-toggle="modal" data-original-title="test" data-target="#exampleModal">
+                                <i  className="fa fa-ban" style={{ width: 35, fontSize: 20, padding: 11,color:'#e4566e' }}></i></span>
+                            </div>
+                    ),
+                    style: {
+                        textAlign: 'center'
+                    },
+                    sortable: false
+                })
             }
             
         }
@@ -256,6 +339,62 @@ export class Datatable extends Component {
                         </div>
                         </div>
                          )}
+                    </Modal>
+                    <Modal open={this.state.openStar} onClose={this.onCloseModal} >
+                        
+                        <div className="modal-header">
+                            <h5 className="modal-title f-w-600" id="exampleModalLabel2">Give Rate</h5>
+                        </div>
+                        <div>
+                        <div className="modal-body">
+                            <div className="col-md-12">
+                            { this.state.activeitem.Producers.map((product, index ) => (
+                                <div>
+                                <h4>
+                                    {product.firstName}:
+                                </h4>
+                                <StarRatingComponent 
+                                    name={index}
+                                    starCount={5}
+                                    value={this.state.rate}
+                                    onStarClick={this.onStarClick.bind(this)}
+                                />
+                                </div>))}
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={() => this.onCloseModal('VaryingMdo')}>Close</button>
+                    </div>
+                    </div>
+                    </Modal>
+                    <Modal open={this.state.openComplaint} onClose={this.onCloseModal} >
+                        
+                        <div className="modal-header">
+                            <h5 className="modal-title f-w-600" id="exampleModalLabel2">Give Complaint</h5>
+                        </div>
+                        <div>
+                        <div className="modal-body">
+                            
+                        
+                            <div className="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                            { this.state.activeitem.Producers.map((product, index ) => (
+                                <label className="d-block" >
+                                    <input className="radio_animated" onChange={this.handleChange.bind(this)} id="edo-ani3" value={product._id} type="radio" name="selectedId" />
+                                    {product.firstName}
+                                                </label>
+                                                
+                            ))}
+                            </div>
+                        <textarea className="form-control" placeholder="Title" id="exampleFormControlTextarea1" rows="1" name="title" onChange={this.handleChange.bind(this)} ></textarea>
+                        <textarea className="form-control" placeholder="Write Your Complaint Here" id="exampleFormControlTextarea1" rows="6" name="complaint" onChange={this.handleChange.bind(this)} ></textarea>
+                            
+                        <div className="modal-footer">
+                        
+                        <button type="button" className="btn btn-primary" onClick={() => this.onSendComplaint('VaryingMdo')}>Send</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => this.onCloseModal('VaryingMdo')}>Close</button>
+                    </div>
+                    </div>
+                    </div>
                     </Modal>
                 <ReactTable
                     data={myData}

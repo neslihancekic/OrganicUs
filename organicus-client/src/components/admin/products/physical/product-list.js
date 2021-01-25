@@ -2,7 +2,6 @@ import React, { Component,Fragment } from 'react'
 
 import {Link} from 'react-router-dom'
 import Breadcrumb from '../../common/breadcrumb';
-import data from '../../../../assets/admin/data/physical_list';
 import { Edit, Trash2 } from 'react-feather'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,8 +15,7 @@ export class Product_list extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            products:[],
-            data
+            products:[]
         }
         
     }

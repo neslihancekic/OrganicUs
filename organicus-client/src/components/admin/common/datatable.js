@@ -348,7 +348,7 @@ export class Datatable extends Component {
                         <div>
                         <div className="modal-body">
                             <div className="col-md-12">
-                            { this.state.activeitem.Producers.map((product, index ) => (
+                            { this.state.activeitem.Producers && this.state.activeitem.Producers.map((product, index ) => (
                                 <div>
                                 <h4>
                                     {product.firstName}:
@@ -377,7 +377,7 @@ export class Datatable extends Component {
                             
                         
                             <div className="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                            { this.state.activeitem.Producers.map((product, index ) => (
+                            {this.state.activeitem.Producers && this.state.activeitem.Producers.map((product, index ) => (
                                 <label className="d-block" >
                                     <input className="radio_animated" onChange={this.handleChange.bind(this)} id="edo-ani3" value={product._id} type="radio" name="selectedId" />
                                     {product.firstName}
